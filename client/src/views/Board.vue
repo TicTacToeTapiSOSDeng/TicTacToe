@@ -154,7 +154,7 @@ export default {
         joinRoomOrang (room) {
             console.log('join room orang', room.roomName)
             db.ref('/Players/Player2').set({
-                nickname : 'nickname 2',
+                nickname : localStorage.getItem('nickname'),
                 statusPlayer: false,
                 typePlayer: 'clear'
             })

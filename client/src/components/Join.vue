@@ -11,7 +11,7 @@
             <tr v-for="(room, index) in roomList" :key="index" >
             <td> {{room.roomName}} </td>
             <td>1/2</td>
-            <td><button class="button-join" @click="joinRoomOrang">JOIN</button></td>
+            <td><button class="button-join" @click="joinRoomOrang(room.roomName)">JOIN</button></td>
             </tr>
             </table>
         </div>
