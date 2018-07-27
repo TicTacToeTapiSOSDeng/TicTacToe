@@ -3,6 +3,9 @@ import Router from 'vue-router'
 import Home from './views/Home.vue'
 import Login from './views/Login.vue'
 import Board from './views/Board.vue'
+import Room from './views/Room.vue'
+import JoinRoom from './views/JoinRoom.vue'
+
 
 Vue.use(Router)
 
@@ -22,6 +25,16 @@ export default new Router({
       path: '/board',
       name: 'board',
       component: Board
+    },
+    {
+      path: '/room',
+      name: 'room',
+      component: Room
+    },
+    {
+      path: '/join',
+      name: 'join',
+      component: JoinRoom
     }
   ]
 })
