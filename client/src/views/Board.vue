@@ -1,8 +1,10 @@
 <template>
-<div style="margin-top:15%" >
-    <v-container style="background-color:lightcoral" fluid>
+<main style="background-color:lightcoral; height: 100vh;">
+    <div>
+    <v-container fluid>
+        <h1>Tic Tac Toe</h1>
         <v-layout align-end justify-center row fill-height>
-            <v-card flat >
+            <v-card flat style="margin-top:30vh">
             <v-flex xs2>
                     <v-btn :disabled='data1.statusbtn' @click="button1" class="block"> <v-icon :size="data1.size" class="iconn" > {{data1.icon}} </v-icon> </v-btn>
                     <v-btn :disabled='data4.statusbtn' @click="button4" class="block"> <v-icon :size="data4.size" class="iconn" > {{data4.icon}} </v-icon>  </v-btn>
@@ -26,12 +28,6 @@
         </v-layout>
     </v-container>
     <v-container>
-    <input type="text">
-    <v-btn @click="addUser" >Add user</v-btn>
-    <v-btn @click="joinRoom" > Join Room </v-btn>
-    <v-btn @click="chooseRoom"> Choose Room </v-btn>
-    <input type="text" v-model="nameRoom">
-    <v-btn @click="createRoom" > createRoom</v-btn>
     <div>
         <v-card v-for="(room, index) in roomList" :key="index" >
             <v-card-text>
@@ -42,6 +38,8 @@
     </div>
     </v-container>
 </div>
+</main>
+
 </template>
 
 <script>
@@ -50,83 +48,34 @@ import {db} from '@/firebase/firebase.js'
 import swal from 'sweetalert'
 export default {
     created () {
-            this.getRoomList()
+        this.triggerAdd()
+        this.trigerDataPlayer()
+        
+    },
+    computed: {
+        ...mapState([
+            'data1', 'data2', 'data3', 'data4', 'data5', 'data6', 'data7', 'data8', 'data9', 'player1', 'player2'
+        ])
     },
     data () {
         return {
             roomList : [],
             nickname :'',
             nameRoom : '',
-            data1 :  {
-                icon: 'visibility',
-                player: 3,
-                size: 100,
-                statusbtn : false
-            } ,
-            data2 :  {
-                icon: 'visibility',
-                player: 3,
-                size: 100,
-                statusbtn : false
-            } ,
-            data3 :  {
-                icon: 'visibility',
-                player: 3,
-                size: 100,
-                statusbtn : false
-            } ,
-            data4 :  {
-                icon: 'visibility',
-                player: 3,
-                size: 100,
-                statusbtn : false
-            } ,
-            data5 :  {
-                icon: 'visibility',
-                player: 3,
-                size: 100,
-                statusbtn : false
-            } ,
-            data6 :  {
-                icon: 'visibility',
-                player: 3,
-                size: 100,
-                statusbtn : false
-            } ,
-            data7 :  {
-                icon: 'visibility',
-                player: 3,
-                size: 100,
-                statusbtn : false
-            } ,
-            data8 :  {
-                icon: 'visibility',
-                player: 3,
-                size: 100,
-                statusbtn : false
-            } ,
-            data9 :  {
-                icon: 'visibility',
-                player: 3,
-                size: 100,
-                statusbtn : false
-            } ,
-            userTurn: localStorage.getItem('user')
+            userTurn: localStorage.getItem('user'),
         }
     },
     methods: {
+        trigerDataPlayer () {
+            let value = localStorage.getItem('roomName')
+            this.getDataPlayer(value)
+        },
         ...mapActions([
-            'createNewRoom'
+            'createNewRoom', 'getDataRoom', 'getDataPlayer'
         ]),
-        addUser() {
-            localStorage.setItem('nickname', this.nickname)
-            this.$router.push('/')
-        },
-        chooseRoom () {
-            console.log('choose room')
-        },
-        joinRoom () {
-            console.log('join room')
+        triggerAdd () {
+            let value = localStorage.getItem('roomName')
+            this.getDataRoom(value)
         },
         createRoom () {
             console.log('reate room')
@@ -135,47 +84,36 @@ export default {
             localStorage.setItem('player','player1')
             this.createNewRoom(this.nameRoom)
         },
-        getRoomList () {
-            db.ref('/Rooms/')
-            .once('value')
-            .then(snapshot=> {
-                let result = snapshot.val()
-                console.log(result,'ini result')
-                for(var key in result) {
-                    let room = result[key]
-                    room.roomName = key
-
-                    this.roomList.push(room)
-                }
-                // this.roomList.push(result)
-                console.log(this.roomList)
-            })
-        },
-        joinRoomOrang (room) {
-            console.log('join room orang', room.roomName)
-            db.ref('/Players/Player2').set({
-                nickname : localStorage.getItem('nickname'),
-                statusPlayer: false,
-                typePlayer: 'clear'
-            })
-            .then(Response=> {
-                db.ref('/Rooms/' + room.roomName + '/player2').set({
-                    nickname: 'nickname 2',
-                    status: false
-                })
-            })
-        },
         button1 () {
             console.log('button 1')
-            let user = this.userTurn
-            if (!user) {
-                localStorage.setItem('user', true)
+            // let user = this.userTurn
+            console.log(this.player1.statusPlayer, ' ini player 1')
+            console.log(this.player2.statusPlayer, ' ini player 2')
+
+            let user1 = this.player1.statusPlayer
+            let user2 = this.player1.statusPlayer
+            let room = localStorage.getItem('roomName')
+
+            if (user1 === false) {
+                this.player1.statusPlayer = true,
+                this.player2.statusPlayer = false
+
+                console.log('user1',user1)
+                // localStorage.setItem('user', true)
                 this.userTurn = true
                 this.data1.icon = 'clear'
                 this.data1.size = 100
                 this.data1.statusbtn = true
                 console.log('ini if')
-
+                db.ref('/Rooms/'+room+'/dataBoard/data1').set({
+                    icon: 'clear',
+                    size: '100',
+                    statusbtn: false
+                })
+                .then(() => {
+                    console.log('Masuk')
+                    
+                })
                 if(this.isWon(this.data1.icon, this.data2.icon, this.data3.icon)) {
                     console.log('X menang')
                     this.showAlert(this.data1.icon)
@@ -191,14 +129,25 @@ export default {
                 }
                 
             }
-            else if (user) {
-                localStorage.setItem('user', false)
+            else if (user1 === true) {
+                this.player1.statusPlayer = false,
+                this.player2.statusPlayer = true
+
+                console.log('user1',user1)
+                // localStorage.setItem('user', false)
                 this.userTurn = false
                 this.data1.icon = 'far fa-circle'
                 this.data1.size = 80
                 this.data1.statusbtn = true
                 console.log('ini else')
-
+                db.ref('/Rooms/'+room+'/dataBoard/data1').set({
+                    icon: 'far fa-circle',
+                    size: '100',
+                    statusbtn: false
+                })
+                .then(() => {
+                    console.log('Masuk')
+                })
                 if(this.isWon(this.data1.icon, this.data2.icon, this.data3.icon)) {
                     console.log('O menang')
                     this.showAlert(this.data1.icon)
@@ -215,14 +164,30 @@ export default {
         },
         button2 () {
             console.log('button 2')
-            let user = this.userTurn
-            if (!user) {
-                localStorage.setItem('user', true)
+            // let user = this.userTurn
+
+            let user1 = this.player1.statusPlayer
+            let user2 = this.player1.statusPlayer
+            let room = localStorage.getItem('roomName')
+            if (user1 === false) {
+                this.player1.statusPlayer = true
+                this.player2.statusPlayer = false
+
+                // localStorage.setItem('user', true)
                 this.userTurn = true
                 this.data2.icon = 'clear'
                 this.data2.size = 100
                 this.data2.statusbtn = true
                 console.log('ini if')
+                
+                db.ref('/Rooms/'+room+'/dataBoard/data2').set({
+                    icon: 'clear',
+                    size: '100',
+                    statusbtn: false
+                })
+                .then(() => {
+                    console.log('Masuk')
+                })
 
                 if(this.isWon(this.data1.icon, this.data2.icon, this.data3.icon)) {
                     console.log('X menang')
@@ -235,14 +200,23 @@ export default {
                     
                 }
             }
-            else if (user) {
-                localStorage.setItem('user', false)
+            else if (user1 === true) {
+                this.player1.statusPlayer = false
+                this.player2.statusPlayer = true
+                // localStorage.setItem('user', false)
                 this.userTurn = false
                 this.data2.icon = 'far fa-circle'
                 this.data2.size = 80
                 this.data2.statusbtn = true
                 console.log('ini else')
-
+                db.ref('/Rooms/'+room+'/dataBoard/data2').set({
+                    icon: 'far fa-circle',
+                    size: '100',
+                    statusbtn: false
+                })
+                .then(() => {
+                    console.log('Masuk')
+                })
                 if(this.isWon(this.data1.icon, this.data2.icon, this.data3.icon)) {
                     console.log('O menang')
                     this.showAlert(this.data2.icon)
@@ -256,14 +230,27 @@ export default {
         },
         button3 () {
             console.log('button 3')
-            let user = this.userTurn
-            if (!user) {
-                localStorage.setItem('user', true)
+            // let user = this.userTurn
+            let user1 = this.player1.statusPlayer
+            let user2 = this.player1.statusPlayer
+            let room = localStorage.getItem('roomName')
+            if (user1 === false) {
+                this.player1.statusPlayer = true
+                this.player2.statusPlayer = false
+                // localStorage.setItem('user', true)
                 this.userTurn = true
                 this.data3.icon = 'clear'
                 this.data3.size = 100
                 this.data3.statusbtn = true
                 console.log('ini if')
+                db.ref('/Rooms/'+room+'/dataBoard/data3').set({
+                    icon: 'clear',
+                    size: '100',
+                    statusbtn: false
+                })
+                .then(() => {
+                    console.log('Masuk')
+                })
 
                 if(this.isWon(this.data1.icon, this.data2.icon, this.data3.icon)) {
                     console.log('X menang')
@@ -279,13 +266,24 @@ export default {
                 }
 
             }
-            else if (user) {
-                localStorage.setItem('user', false)
+            else if (user1 === true) {
+                this.player1.statusPlayer = false
+                this.player2.statusPlayer = true
+                // localStorage.setItem('user', false)
                 this.userTurn = false
                 this.data3.icon = 'far fa-circle'
                 this.data3.size = 80
                 this.data3.statusbtn = true
                 console.log('ini else')
+                let room = localStorage.getItem('roomName')
+                db.ref('/Rooms/'+room+'/dataBoard/data3').set({
+                    icon: 'far fa-circle',
+                    size: '100',
+                    statusbtn: false
+                })
+                .then(() => {
+                    console.log('Masuk')
+                })
 
                 if(this.isWon(this.data1.icon, this.data2.icon, this.data3.icon)) {
                     console.log('O menang')
@@ -303,15 +301,30 @@ export default {
         },
         button4 () {
             console.log('button 4')
-            let user = this.userTurn
-            if (!user) {
-                localStorage.setItem('user', true)
+            // let user = this.userTurn
+            let user1 = this.player1.statusPlayer
+            let user2 = this.player1.statusPlayer
+            let room = localStorage.getItem('roomName')
+
+            if (user1 === false) {
+                this.player1.statusPlayer = true
+                this.player2.statusPlayer = false 
+
+                // localStorage.setItem('user', true)
                 this.userTurn = true
                 this.data4.icon = 'clear'
                 this.data4.size = 100
                 this.data4.statusbtn = true
                 console.log('ini if')
-
+                let room = localStorage.getItem('roomName')
+                db.ref('/Rooms/'+room+'dataBoard/data4').set({
+                    icon: 'clear',
+                    size: '100',
+                    statusbtn: false
+                })
+                .then(() => {
+                    console.log('Masuk')
+                })
                 if(this.isWon(this.data1.icon, this.data4.icon, this.data7.icon)) {
                     console.log('X menang')
                     this.showAlert(this.data4.icon)
@@ -322,14 +335,24 @@ export default {
                     console.log('belum menang')
                 }
             }
-            else if (user) {
-                localStorage.setItem('user', false)
+            else if (user1 === true) {
+                this.player1.statusPlayer = false
+                this.player2.statusPlayer = true
+
+                // localStorage.setItem('user', false)
                 this.userTurn = false
                 this.data4.icon = 'far fa-circle'
                 this.data4.size = 80
                 this.data4.statusbtn = true
                 console.log('ini else')
-
+                db.ref('/Rooms/'+room+'/dataBoard//data4').set({
+                    icon: 'far fa-circle',
+                    size: '100',
+                    statusbtn: false
+                })
+                .then(() => {
+                    console.log('Masuk')
+                })
                  if(this.isWon(this.data1.icon, this.data4.icon, this.data7.icon)) {
                     console.log('O menang')
                     this.showAlert(this.data4.icon)
@@ -343,15 +366,29 @@ export default {
         },
         button5 () {
             console.log('button 5')
-            let user = this.userTurn
-            if (!user) {
-                localStorage.setItem('user', true)
+            // let user = this.userTurn
+            let user1 = this.player1.statusPlayer
+            let user2 = this.player1.statusPlayer
+            let room = localStorage.getItem('roomName')
+
+            if (user1 === false) {
+                // localStorage.setItem('user', true)
+                this.player1.statusPlayer = true
+                this.player2.statusPlayer = false
+
                 this.userTurn = true
                 this.data5.icon = 'clear'
                 this.data5.size = 100
                 this.data5.statusbtn = true
                 console.log('ini if')
-
+                db.ref('/Rooms/'+room+'/dataBoard/data5').set({
+                    icon: 'clear',
+                    size: '100',
+                    statusbtn: false
+                })
+                .then(() => {
+                    console.log('Masuk')
+                })
                 if(this.isWon(this.data4.icon, this.data5.icon, this.data6.icon)) {
                     console.log('X menang')
                     this.showAlert(this.data5.icon)
@@ -368,14 +405,24 @@ export default {
                     console.log('belum menang')
                 }
             }
-            else if (user) {
-                localStorage.setItem('user', false)
+            else if (user1 === true) {
+                // localStorage.setItem('user', false)
+                this.player1.statusPlayer = false
+                this.player2.statusPlayer = true
+
                 this.userTurn = false
                 this.data5.icon = 'far fa-circle'
                 this.data5.size = 80
                 this.data5.statusbtn = true
                 console.log('ini else')
-
+                db.ref('/Rooms/'+room+'/dataBoard/data5').set({
+                    icon: 'far fa-circle',
+                    size: '100',
+                    statusbtn: false
+                })
+                .then(() => {
+                    console.log('Masuk')
+                })
                 if(this.isWon(this.data4.icon, this.data5.icon, this.data6.icon)) {
                     console.log('O menang')
                     this.showAlert(this.data5.icon)
@@ -395,15 +442,29 @@ export default {
         },
         button6 () {
             console.log('button 6')
-            let user = this.userTurn
-            if (!user) {
-                localStorage.setItem('user', true)
+            let room = localStorage.getItem('roomName')
+            // let user = this.userTurn
+            let user1 = this.player1.statusPlayer
+            let user2 = this.player1.statusPlayer
+
+            if (user1 === false) {
+                this.player1.statusPlayer = true
+                this.player2.statusPlayer = false
+
+                // localStorage.setItem('user', true)
                 this.userTurn = true
                 this.data6.icon = 'clear'
                 this.data6.size = 100
                 this.data6.statusbtn = true
                 console.log('ini if')
-
+                db.ref('/Rooms/'+room+'/dataBoard/data6').set({
+                    icon: 'clear',
+                    size: '100',
+                    statusbtn: false
+                })
+                .then(() => {
+                    console.log('Masuk')
+                })
                 if(this.isWon(this.data3.icon, this.data6.icon, this.data9.icon)) {
                     console.log('X menang')
                     this.showAlert(this.data6.icon)
@@ -414,14 +475,24 @@ export default {
                     console.log('belum menang')
                 }
             }
-            else if (user) {
-                localStorage.setItem('user', false)
+            else if (user1 === true) {
+                this.player1.statusPlayer = false
+                this.player2.statusPlayer = true
+
+                // localStorage.setItem('user', false)
                 this.userTurn = false
                 this.data6.icon = 'far fa-circle'
                 this.data6.size = 80
                 this.data6.statusbtn = true
                 console.log('ini else')
-
+                db.ref('/Rooms/'+room+'/dataBoard/data6').set({
+                    icon: 'far fa-circle',
+                    size: '100',
+                    statusbtn: false
+                })
+                .then(() => {
+                    console.log('Masuk')
+                })
                 if(this.isWon(this.data3.icon, this.data6.icon, this.data9.icon)) {
                     console.log('O menang')
                     this.showAlert(this.data6.icon)
@@ -435,15 +506,28 @@ export default {
         },
         button7 () {
             console.log('button 7')
-            let user = this.userTurn
-            if (!user) {
-                localStorage.setItem('user', true)
+            let room = localStorage.getItem('roomName')
+            // let user = this.userTurn
+            let user1 = this.player1.statusPlayer
+            let user2 = this.player1.statusPlayer
+
+            if (user1 === false) {
+                this.player1.statusPlayer = true
+                this.player2.statusPlayer = false
+                // localStorage.setItem('user', true)
                 this.userTurn = true
                 this.data7.icon = 'clear'
                 this.data7.size = 100
                 this.data7.statusbtn = true
                 console.log('ini if')
-
+                db.ref('/Rooms/'+room+'/dataBoard/data7').set({
+                    icon: 'clear',
+                    size: '100',
+                    statusbtn: false
+                })
+                .then(() => {
+                    console.log('Masuk')
+                })
                 if(this.isWon(this.data1.icon, this.data4.icon, this.data7.icon)) {
                     console.log('X menang')
                     this.showAlert(this.data7.icon)
@@ -457,14 +541,24 @@ export default {
                     console.log('belum menang')
                 }
             }
-            else if (user) {
-                localStorage.setItem('user', false)
+            else if (user1 === true) {
+                this.player1.statusPlayer = true
+                this.player2.statusPlayer = false
+                // localStorage.setItem('user', false)
+                let room = localStorage.getItem('roomName')
                 this.userTurn = false
                 this.data7.icon = 'far fa-circle'
                 this.data7.size = 80
                 this.data7.statusbtn = true
                 console.log('ini else')
-
+                db.ref('/Rooms/'+room+'/dataBoard/data7').set({
+                    icon: 'far fa-circle',
+                    size: '100',
+                    statusbtn: false
+                })
+                .then(() => {
+                    console.log('Masuk')
+                })
                 if(this.isWon(this.data1.icon, this.data4.icon, this.data7.icon)) {
                     console.log('O menang')
                     this.showAlert(this.data7.icon)
@@ -481,15 +575,28 @@ export default {
         },
         button8 () {
             console.log('button 8')
-            let user = this.userTurn
-            if (!user) {
-                localStorage.setItem('user', true)
+            let room = localStorage.getItem('roomName')
+            // let user = this.userTurn
+            let user1 = this.player1.statusPlayer
+            let user2 = this.player1.statusPlayer
+
+            if (user1 === false) {
+                this.player1.statusPlayer = true
+                this.player2.statusPlayer = false
+                // localStorage.setItem('user', true)
                 this.userTurn = true
                 this.data8.icon = 'clear'
                 this.data8.size = 100
                 this.data8.statusbtn = true
                 console.log('ini if')
-
+                db.ref('/Rooms/'+room+'/dataBoard/data8').set({
+                    icon: 'clear',
+                    size: '100',
+                    statusbtn: false
+                })
+                .then(() => {
+                    console.log('Masuk')
+                })
                 if(this.isWon(this.data7.icon, this.data8.icon, this.data9.icon)) {
                     console.log('X menang')
                     this.showAlert(this.data8.icon)
@@ -500,14 +607,24 @@ export default {
                     console.log('belum menang')
                 }
             }
-            else if (user) {
-                localStorage.setItem('user', false)
+            else if (user1 === true) {
+                this.player1.statusPlayer = false
+                this.player2.statusPlayer = true
+                // localStorage.setItem('user', false)
+                let room = localStorage.getItem('roomName')
                 this.userTurn = false
                 this.data8.icon = 'far fa-circle'
                 this.data8.size = 80
                 this.data8.statusbtn = true
                 console.log('ini else')
-
+                db.ref('/Rooms/'+room+'/dataBoard/data8').set({
+                    icon: 'far fa-circle',
+                    size: '100',
+                    statusbtn: false
+                })
+                .then(() => {
+                    console.log('Masuk')
+                })
                 if(this.isWon(this.data7.icon, this.data8.icon, this.data9.icon)) {
                     console.log('O menang')
                     this.showAlert(this.data8.icon)
@@ -521,15 +638,27 @@ export default {
         },
         button9 () {
             console.log('button 9')
-            let user = this.userTurn
-            if (!user) {
-                localStorage.setItem('user', true)
+            let room = localStorage.getItem('roomName')
+            // let user = this.userTurn
+            let user1 = this.player1.statusPlayer
+            let user2 = this.player1.statusPlayer
+            if (user1 === false) {
+                this.player1.statusPlayer = true
+                this.player2.statusPlayer = false
+                // localStozrage.setItem('user', true)
                 this.userTurn = true
                 this.data9.icon = 'clear'
                 this.data9.size = 100
                 this.data9.statusbtn = true
                 console.log('ini if')
-
+                db.ref('/Rooms/'+room+'/dataBoard/data9').set({
+                    icon: 'clear',
+                    size: '100',
+                    statusbtn: false
+                })
+                .then(() => {
+                    console.log('Masuk')
+                })
                 if(this.isWon(this.data3.icon, this.data6.icon, this.data9.icon)) {
                     console.log('X menang')
                     this.showAlert(this.data9.icon)
@@ -543,14 +672,23 @@ export default {
                     console.log('belum menang')
                 }
             }
-            else if (user) {
-                localStorage.setItem('user', false)
+            else if (user1 === true) {
+                this.player1.statusPlayer = false
+                this.player2.statusPlayer = true
+                // localStorage.setItem('user', false)
                 this.userTurn = false
                 this.data9.icon = 'far fa-circle'
                 this.data9.size = 80
                 this.data9.statusbtn = true
                 console.log('ini else')
-
+                db.ref('/Rooms/'+room+'/dataBoard/data9').set({
+                    icon: 'far fa-circle',
+                    size: '100',
+                    statusbtn: false
+                })
+                .then(() => {
+                    console.log('Masuk')
+                })
                 if(this.isWon(this.data3.icon, this.data6.icon, this.data9.icon)) {
                     console.log('O menang')
                     this.showAlert(this.data9.icon)
@@ -597,7 +735,7 @@ export default {
 }
 
 .block:hover {
-    background-color: #4CAF50;
+    /* background-color: #4CAF50; */
     color: white;
 }
 .iconn {
