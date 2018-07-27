@@ -9,12 +9,13 @@
                             <v-layout row wrap>
                               <v-text-field id="text"
                                 label="Room Name"
+                                v-model="roomname"
                               ></v-text-field>
                             </v-layout>
                           </v-form>
                         </v-container>
                         <v-card-actions>
-                        <v-btn id="createRoom" color="white">Submit</v-btn>
+                        <v-btn @click="createNewRoom" id="createRoom" color="white">Submit</v-btn>
                       </v-card-actions>
                     </v-card>
                 </v-flex>
@@ -24,8 +25,23 @@
 </template>
 
 <script>
+import {mapState, mapActions} from 'vuex'
 export default {
-    
+    computed: {
+        roomname: {
+            get () {
+                return this.$store.state.roomname
+            },
+            set (value) {
+                this.$store.commit('setRoomName', value)
+            }
+        }
+    },
+    methods: {
+        ...mapActions([
+            'createNewRoom'
+        ])
+    }
 }
 </script>
 

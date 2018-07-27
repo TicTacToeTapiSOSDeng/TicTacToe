@@ -1,13 +1,18 @@
 <template>
     <div class="buttonCreate">
-        <button class= "btncreate">Create Room</button>
+        <button class= "btncreate" @click="toRoom" >Create Room</button>
     </div>
 </template>
 
 
 <script>
 export default {
-    
+    methods: {
+        toRoom () {
+            console.log('test')
+            this.$router.push('/create-room')
+        }
+    }
 }
 </script>
 
