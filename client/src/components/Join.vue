@@ -8,15 +8,10 @@
             <th>Player</th>
             <th>Join</th>
             </tr>
-            <tr>
-            <td>room 1</td>
+            <tr v-for="(room, index) in roomList" :key="index" >
+            <td> {{room.roomName}} </td>
             <td>1/2</td>
-            <td><button class="button-join">JOIN</button></td>
-            </tr>
-            <tr>
-            <td>room 2</td>
-            <td>1/2</td>
-            <td><button class="button-join">JOIN</button></td>
+            <td><button class="button-join" @click="joinRoomOrang">JOIN</button></td>
             </tr>
             </table>
         </div>
@@ -25,10 +20,21 @@
 
 
 <script>
+import {mapState, mapActions} from 'vuex'
 export default {
     name:'join',
-    data (){
-        // nama : ["a","b","c"]
+    created () {
+        this.getRoomList()
+    },
+    methods: {
+        ...mapActions([
+            'getRoomList', 'joinRoomOrang'
+        ])
+    },
+    computed: {
+        ...mapState([
+            'roomList'
+        ])
     }
 }
 </script>
