@@ -114,13 +114,30 @@ export default {
         button1 () {
             console.log('button 1')
             let user = this.userTurn
-            if (!localStorage.getItem('user')) {
+
+            // if (!localStorage.getItem('user')
+            if (!user) {
                 localStorage.setItem('user', true)
                 this.userTurn = true
                 this.data1.icon = 'clear'
                 this.data1.size = 100
                 this.data1.statusbtn = true
                 console.log('ini if')
+
+                if(this.isWon(this.data1.icon, this.data2.icon, this.data3.icon)) {
+                    console.log('X menang')
+                    this.showAlert(this.data1.icon)
+
+                } else if (this.isWon(this.data1.icon, this.data4.icon, this.data7.icon)) {
+                    console.log('X menang')
+                    this.showAlert(this.data1.icon)
+                } else if (this.isWon(this.data1.icon, this.data5.icon, this.data9.icon)) {
+                    console.log('X menang')
+                    this.showAlert(this.data1.icon)
+                } else {
+                    console.log('belum menang')
+                }
+                
             }
             else if (user) {
                 localStorage.setItem('user', false)
@@ -129,6 +146,19 @@ export default {
                 this.data1.size = 80
                 this.data1.statusbtn = true
                 console.log('ini else')
+
+                if(this.isWon(this.data1.icon, this.data2.icon, this.data3.icon)) {
+                    console.log('O menang')
+                    this.showAlert(this.data1.icon)
+                } else if (this.isWon(this.data1.icon, this.data4.icon, this.data7.icon)) {
+                    console.log('O menang')
+                    this.showAlert(this.data1.icon)
+                } else if (this.isWon(this.data1.icon, this.data5.icon, this.data9.icon)) {
+                    console.log('O menang')
+                    this.showAlert(this.data1.icon)
+                } else {
+                    console.log('belum menang')
+                }
             }
         },
         button2 () {
@@ -141,6 +171,17 @@ export default {
                 this.data2.size = 100
                 this.data2.statusbtn = true
                 console.log('ini if')
+
+                if(this.isWon(this.data1.icon, this.data2.icon, this.data3.icon)) {
+                    console.log('X menang')
+                    this.showAlert(this.data2.icon)
+                } else if (this.isWon(this.data2.icon, this.data5.icon, this.data8.icon)) {
+                    console.log('X menang')
+                    this.showAlert(this.data2.icon)
+                } else {
+                    console.log('belum menang')
+                    
+                }
             }
             else if (user) {
                 localStorage.setItem('user', false)
@@ -149,6 +190,16 @@ export default {
                 this.data2.size = 80
                 this.data2.statusbtn = true
                 console.log('ini else')
+
+                if(this.isWon(this.data1.icon, this.data2.icon, this.data3.icon)) {
+                    console.log('O menang')
+                    this.showAlert(this.data2.icon)
+                } else if (this.isWon(this.data2.icon, this.data5.icon, this.data8.icon)) {
+                    console.log('O menang')
+                    this.showAlert(this.data2.icon)
+                } else {
+                    console.log('belum menang')
+                }
             }
         },
         button3 () {
@@ -161,6 +212,20 @@ export default {
                 this.data3.size = 100
                 this.data3.statusbtn = true
                 console.log('ini if')
+
+                if(this.isWon(this.data1.icon, this.data2.icon, this.data3.icon)) {
+                    console.log('X menang')
+                    this.showAlert(this.data3.icon)
+                } else if (this.isWon(this.data3.icon, this.data6.icon, this.data9.icon)) {
+                    console.log('X menang')
+                    this.showAlert(this.data3.icon)
+                } else if (this.isWon(this.data3.icon, this.data5.icon, this.data7.icon)) {
+                    console.log('X menang')
+                    this.showAlert(this.data3.icon)
+                } else {
+                    console.log('belum menang')
+                }
+
             }
             else if (user) {
                 localStorage.setItem('user', false)
@@ -169,6 +234,19 @@ export default {
                 this.data3.size = 80
                 this.data3.statusbtn = true
                 console.log('ini else')
+
+                if(this.isWon(this.data1.icon, this.data2.icon, this.data3.icon)) {
+                    console.log('O menang')
+                    this.showAlert(this.data3.icon)
+                } else if (this.isWon(this.data3.icon, this.data6.icon, this.data9.icon)) {
+                    console.log('O menang')
+                    this.showAlert(this.data3.icon)
+                } else if (this.isWon(this.data3.icon, this.data5.icon, this.data7.icon)) {
+                    console.log('O menang')
+                    this.showAlert(this.data3.icon)
+                } else {
+                    console.log('belum menang')
+                }
             }
         },
         button4 () {
@@ -181,6 +259,16 @@ export default {
                 this.data4.size = 100
                 this.data4.statusbtn = true
                 console.log('ini if')
+
+                if(this.isWon(this.data1.icon, this.data4.icon, this.data7.icon)) {
+                    console.log('X menang')
+                    this.showAlert(this.data4.icon)
+                } else if (this.isWon(this.data4.icon, this.data5.icon, this.data6.icon)) {
+                    console.log('X menang')
+                    this.showAlert(this.data4.icon)
+                } else {
+                    console.log('belum menang')
+                }
             }
             else if (user) {
                 localStorage.setItem('user', false)
@@ -189,6 +277,16 @@ export default {
                 this.data4.size = 80
                 this.data4.statusbtn = true
                 console.log('ini else')
+
+                 if(this.isWon(this.data1.icon, this.data4.icon, this.data7.icon)) {
+                    console.log('O menang')
+                    this.showAlert(this.data4.icon)
+                } else if (this.isWon(this.data4.icon, this.data5.icon, this.data6.icon)) {
+                    console.log('O menang')
+                    this.showAlert(this.data4.icon)
+                } else {
+                    console.log('belum menang')
+                }
             }
         },
         button5 () {
@@ -201,6 +299,22 @@ export default {
                 this.data5.size = 100
                 this.data5.statusbtn = true
                 console.log('ini if')
+
+                if(this.isWon(this.data4.icon, this.data5.icon, this.data6.icon)) {
+                    console.log('X menang')
+                    this.showAlert(this.data5.icon)
+                } else if (this.isWon(this.data2.icon, this.data5.icon, this.data8.icon)) {
+                    console.log('X menang')
+                    this.showAlert(this.data5.icon)
+                } else if (this.isWon(this.data1.icon, this.data5.icon, this.data9.icon)) {
+                    console.log('X menang')
+                    this.showAlert(this.data5.icon)
+                }  else if (this.isWon(this.data3.icon, this.data5.icon, this.data7.icon)) {
+                    console.log('X menang')
+                    this.showAlert(this.data5.icon)
+                } else {
+                    console.log('belum menang')
+                }
             }
             else if (user) {
                 localStorage.setItem('user', false)
@@ -209,6 +323,22 @@ export default {
                 this.data5.size = 80
                 this.data5.statusbtn = true
                 console.log('ini else')
+
+                if(this.isWon(this.data4.icon, this.data5.icon, this.data6.icon)) {
+                    console.log('O menang')
+                    this.showAlert(this.data5.icon)
+                } else if (this.isWon(this.data2.icon, this.data5.icon, this.data8.icon)) {
+                    console.log('O menang')
+                    this.showAlert(this.data5.icon)
+                } else if (this.isWon(this.data1.icon, this.data5.icon, this.data9.icon)) {
+                    console.log('O menang')
+                    this.showAlert(this.data5.icon)
+                }  else if (this.isWon(this.data3.icon, this.data5.icon, this.data7.icon)) {
+                    console.log('O menang')
+                    this.showAlert(this.data5.icon)
+                } else {
+                    console.log('belum menang')
+                }
             }
         },
         button6 () {
@@ -221,6 +351,16 @@ export default {
                 this.data6.size = 100
                 this.data6.statusbtn = true
                 console.log('ini if')
+
+                if(this.isWon(this.data3.icon, this.data6.icon, this.data9.icon)) {
+                    console.log('X menang')
+                    this.showAlert(this.data6.icon)
+                } else if (this.isWon(this.data4.icon, this.data5.icon, this.data6.icon)) {
+                    console.log('X menang')
+                    this.showAlert(this.data6.icon)
+                } else {
+                    console.log('belum menang')
+                }
             }
             else if (user) {
                 localStorage.setItem('user', false)
@@ -229,6 +369,16 @@ export default {
                 this.data6.size = 80
                 this.data6.statusbtn = true
                 console.log('ini else')
+
+                if(this.isWon(this.data3.icon, this.data6.icon, this.data9.icon)) {
+                    console.log('O menang')
+                    this.showAlert(this.data6.icon)
+                } else if (this.isWon(this.data4.icon, this.data5.icon, this.data6.icon)) {
+                    console.log('O menang')
+                    this.showAlert(this.data6.icon)
+                } else {
+                    console.log('belum menang')
+                }
             }
         },
         button7 () {
@@ -241,6 +391,19 @@ export default {
                 this.data7.size = 100
                 this.data7.statusbtn = true
                 console.log('ini if')
+
+                if(this.isWon(this.data1.icon, this.data4.icon, this.data7.icon)) {
+                    console.log('X menang')
+                    this.showAlert(this.data7.icon)
+                } else if (this.isWon(this.data7.icon, this.data8.icon, this.data9.icon)) {
+                    console.log('X menang')
+                    this.showAlert(this.data7.icon)
+                } else if (this.isWon(this.data3.icon, this.data5.icon, this.data7.icon)) {
+                    console.log('X menang')
+                    this.showAlert(this.data7.icon)
+                } else {
+                    console.log('belum menang')
+                }
             }
             else if (user) {
                 localStorage.setItem('user', false)
@@ -249,6 +412,19 @@ export default {
                 this.data7.size = 80
                 this.data7.statusbtn = true
                 console.log('ini else')
+
+                if(this.isWon(this.data1.icon, this.data4.icon, this.data7.icon)) {
+                    console.log('O menang')
+                    this.showAlert(this.data7.icon)
+                } else if (this.isWon(this.data7.icon, this.data8.icon, this.data9.icon)) {
+                    console.log('O menang')
+                    this.showAlert(this.data7.icon)
+                } else if (this.isWon(this.data3.icon, this.data5.icon, this.data7.icon)) {
+                    console.log('O menang')
+                    this.showAlert(this.data7.icon)
+                } else {
+                    console.log('belum menang')
+                }
             }
         },
         button8 () {
@@ -261,6 +437,16 @@ export default {
                 this.data8.size = 100
                 this.data8.statusbtn = true
                 console.log('ini if')
+
+                if(this.isWon(this.data7.icon, this.data8.icon, this.data9.icon)) {
+                    console.log('X menang')
+                    this.showAlert(this.data8.icon)
+                } else if (this.isWon(this.data2.icon, this.data5.icon, this.data8.icon)) {
+                    console.log('X menang')
+                    this.showAlert(this.data8.icon)
+                } else {
+                    console.log('belum menang')
+                }
             }
             else if (user) {
                 localStorage.setItem('user', false)
@@ -269,6 +455,16 @@ export default {
                 this.data8.size = 80
                 this.data8.statusbtn = true
                 console.log('ini else')
+
+                if(this.isWon(this.data7.icon, this.data8.icon, this.data9.icon)) {
+                    console.log('O menang')
+                    this.showAlert(this.data8.icon)
+                } else if (this.isWon(this.data2.icon, this.data5.icon, this.data8.icon)) {
+                    console.log('O menang')
+                    this.showAlert(this.data8.icon)
+                } else {
+                    console.log('belum menang')
+                }
             }
         },
         button9 () {
@@ -281,6 +477,19 @@ export default {
                 this.data9.size = 100
                 this.data9.statusbtn = true
                 console.log('ini if')
+
+                if(this.isWon(this.data3.icon, this.data6.icon, this.data9.icon)) {
+                    console.log('X menang')
+                    this.showAlert(this.data9.icon)
+                } else if (this.isWon(this.data7.icon, this.data8.icon, this.data9.icon)) {
+                    console.log('X menang')
+                    this.showAlert(this.data9.icon)
+                } else if (this.isWon(this.data1.icon, this.data5.icon, this.data9.icon)) {
+                    console.log('X menang')
+                    this.showAlert(this.data9.icon)
+                } else {
+                    console.log('belum menang')
+                }
             }
             else if (user) {
                 localStorage.setItem('user', false)
@@ -289,7 +498,34 @@ export default {
                 this.data9.size = 80
                 this.data9.statusbtn = true
                 console.log('ini else')
+
+                if(this.isWon(this.data3.icon, this.data6.icon, this.data9.icon)) {
+                    console.log('O menang')
+                    this.showAlert(this.data9.icon)
+                } else if (this.isWon(this.data7.icon, this.data8.icon, this.data9.icon)) {
+                    console.log('O menang')
+                    this.showAlert(this.data9.icon)
+                } else if (this.isWon(this.data1.icon, this.data5.icon, this.data9.icon)) {
+                    console.log('O menang')
+                    this.showAlert(this.data9.icon)
+                } else {
+                    console.log('belum menang')
+                }
             }
+        },
+        isWon(icon1, icon2, icon3) {
+            if (icon1 === icon2 && icon1 === icon3) {
+                return true
+            } else {
+                return false
+            }
+        },
+        showAlert(icon) {
+            swal({
+                title: `${localStorage.getItem('nickname')} Wins!`,
+                text: '',
+                icon: 'success'
+            })
         }
     }
 }
