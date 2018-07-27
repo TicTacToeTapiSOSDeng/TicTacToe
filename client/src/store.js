@@ -58,17 +58,17 @@ export default new Vuex.Store({
           console.log(this.state.roomList)
       })
     },
-    joinRoomOrang (room) {
-      console.log('join room orang', room.roomName)
+    joinRoomOrang (context,value) {
+      console.log('join room orang', value)
       db.ref('/Players/Player2').set({
           nickname : 'nickname 2',
-          statusPlayer: false,
-          typePlayer: 'clear'
+          status: false,
       })
       .then(Response=> {
-          db.ref('/Rooms/' + room.roomName + '/player2').set({
+          db.ref('/Rooms/' + value + '/player2').set({
               nickname: 'nickname 2',
-              status: false
+              statusPlayer: false,
+              typePlayer: 'clear'
           })
           router.push('/board')
       })
