@@ -10,7 +10,7 @@ var config = {
   };
   firebase.initializeApp(config);
 
-  var db = firebase.firestore();
+  var db = firebase.database();
   export {db}
 
   

@@ -28,17 +28,35 @@
     <v-container>
     <input type="text">
     <v-btn @click="addUser" >Add user</v-btn>
+    <v-btn @click="joinRoom" > Join Room </v-btn>
+    <v-btn @click="chooseRoom"> Choose Room </v-btn>
+    <input type="text" v-model="nameRoom">
+    <v-btn @click="createRoom" > createRoom</v-btn>
+    <div>
+        <v-card v-for="(room, index) in roomList" :key="index" >
+            <v-card-text>
+                <v-btn v-if="room.player2" disabled @click="joinRoomOrang (room) " > {{room.roomName}} </v-btn>
+                <v-btn v-else @click="joinRoomOrang (room) " > {{room.roomName}} </v-btn>
+            </v-card-text>
+        </v-card>
+    </div>
     </v-container>
 </div>
 </template>
 
 <script>
+import {mapState, mapActions} from 'vuex'
 import {db} from '@/firebase/firebase.js'
 import swal from 'sweetalert'
 export default {
+    created () {
+            this.getRoomList()
+    },
     data () {
         return {
+            roomList : [],
             nickname :'',
+            nameRoom : '',
             data1 :  {
                 icon: 'visibility',
                 player: 3,
@@ -97,25 +115,59 @@ export default {
         }
     },
     methods: {
+        ...mapActions([
+            'createNewRoom'
+        ]),
         addUser() {
-            db.collection("users").add({
-                first: "Ada",
-                last: "Lovelace",
-                born: 1815
+            localStorage.setItem('nickname', this.nickname)
+            this.$router.push('/')
+        },
+        chooseRoom () {
+            console.log('choose room')
+        },
+        joinRoom () {
+            console.log('join room')
+        },
+        createRoom () {
+            console.log('reate room')
+            console.log(this.nameRoom)
+            localStorage.setItem('roomName', this.nameRoom)
+            localStorage.setItem('player','player1')
+            this.createNewRoom(this.nameRoom)
+        },
+        getRoomList () {
+            db.ref('/Rooms/')
+            .once('value')
+            .then(snapshot=> {
+                let result = snapshot.val()
+                console.log(result,'ini result')
+                for(var key in result) {
+                    let room = result[key]
+                    room.roomName = key
+
+                    this.roomList.push(room)
+                }
+                // this.roomList.push(result)
+                console.log(this.roomList)
             })
-            .then(function(docRef) {
-                console.log("Document written with ID: ", docRef.id);
-                swal('Berhasil menambahkan')
+        },
+        joinRoomOrang (room) {
+            console.log('join room orang', room.roomName)
+            db.ref('/Players/Player2').set({
+                nickname : 'nickname 2',
+                statusPlayer: false,
+                typePlayer: 'clear'
             })
-            .catch(function(error) {
-                console.error("Error adding document: ", error);
-            });
+            .then(Response=> {
+                db.ref('/Rooms/' + room.roomName + '/player2').set({
+                    nickname: 'nickname 2',
+                    status: false
+                })
+            })
         },
         button1 () {
             console.log('button 1')
             let user = this.userTurn
-
-            // if (!localStorage.getItem('user')
             if (!user) {
                 localStorage.setItem('user', true)
                 this.userTurn = true
