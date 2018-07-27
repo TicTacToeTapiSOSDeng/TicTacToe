@@ -9,6 +9,10 @@ import "../node_modules/vue-wysiwyg/dist/vueWysiwyg.css";
 import 'vuetify/dist/vuetify.min.css' // Ensure you are using css-loader
 // index.js or main.js
 import 'material-design-icons-iconfont/dist/material-design-icons.css' // Ensure you are using css-loader
+import VueFire from 'vuefire'
+// var firebase = require('firebase')
+// explicit installation required in module environments
+Vue.use(VueFire)
 Vue.use(Vuetify)
 Vue.use(wysiwyg, {
   maxHeight: "800px"
