@@ -4,8 +4,8 @@
             <v-form>
                 <v-layout row wrap>
                     <v-text-field
-                        label="Regular"
-                        placeholder="Placeholder"
+                        label="Player name"
+                        placeholder="Write your username here"
                     ></v-text-field>
                 </v-layout>
             </v-form>
